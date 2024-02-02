@@ -23,7 +23,11 @@ fetch('https://api.themoviedb.org/3/movie/11?api_key=12126786fe2ba8d56422edd3325
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
+      console.log(data.Year);
+      var display = document.getElementById("display")
+      var movieTitle = data.Title
+      var movieYear = data.Year
+      display.append(movieTitle + " "+ movieYear)
       });
 
   }
