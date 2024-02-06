@@ -28,7 +28,7 @@ var display = document.getElementById("display");
       var movieTitle = data.Title;
       var movieYear = data.Year;
       var actors = data.Actors;
-      display.append(movieTitle + " "+ movieYear + " Actors "+ actors + " Director "+ data.Director)
+      display.append(movieTitle + " "+ movieYear + " Actors: "+ actors + " Director: "+ data.Director)
       });
 
   }
