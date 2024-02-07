@@ -28,7 +28,11 @@ function getAPI(title){
   });
   }
   function getAPI2(title){
+<<<<<<< HEAD
     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
+=======
+    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+>>>>>>> cfb4fe82d480ed35421b536a425c295b8067318d
     .then (function (response){
       return response.json();
     })
@@ -48,7 +52,6 @@ function getAPI(title){
 
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
-    omdbActor(title);
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
@@ -58,41 +61,25 @@ function getAPI(title){
     }
   })
 
-  function omdbActor(title){
-    fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
-    .then (function (response){
-      return response.json();
-    })
-    .then (function(data){
-      console.log(data.results[0].known_for[0].title);
-      var actorSearch = data.results[0].known_for[0].title.toLowerCase();
-      if (topMovies.find((element) => element == actorSearch)){
-        getAPI(actorSearch);
-        getAPI2(actorSearch);
-        display.classList.remove("hidden");
-      }
-    })
-    }
-
   var topMovies = ["citizen kane",
- "casablanca", 
- "the godfather", 
- "gone with the wind", 
- "lawrence of arabia", 
+ "casablanca",
+ "the godfather",
+ "gone with the wind",
+ "lawrence of arabia",
  "the wizard of oz",
- "the graduate", 
- "on the waterfront", 
- "schindler's list", 
- "singin' in the rain", 
- "its a wonderful life", 
- "sunset blvd.", 
- "the bridge on the river kwai", 
- "some like it hot", 
- "star wars", 
- "all about eve", 
- "the african queen", 
- "psycho", 
- "chinatown", 
+ "the graduate",
+ "on the waterfront",
+ "schindler's list",
+ "singin' in the rain",
+ "its a wonderful life",
+ "sunset blvd.",
+ "the bridge on the river kwai",
+ "some like it hot",
+ "star wars",
+ "all about eve",
+ "the african queen",
+ "psycho",
+ "chinatown",
  "one flew over the cuckoo's nest",
   "the grapes of wrath",
 "2001: a space odyssey",
