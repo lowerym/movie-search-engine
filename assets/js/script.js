@@ -48,13 +48,31 @@ function getAPI(title){
 
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
+    omdbActor(title);
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
+      display.classList.remove("hidden");
     } else {
       console.log("please try again");
     }
   })
+
+  function omdbActor(title){
+    fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+    .then (function (response){
+      return response.json();
+    })
+    .then (function(data){
+      console.log(data.results[0].known_for[0].title);
+      var actorSearch = data.results[0].known_for[0].title.toLowerCase();
+      if (topMovies.find((element) => element == actorSearch)){
+        getAPI(actorSearch);
+        getAPI2(actorSearch);
+        display.classList.remove("hidden");
+      }
+    })
+    }
 
   var topMovies = ["citizen kane",
  "casablanca", 
