@@ -36,6 +36,7 @@ function getAPI(title){
     console.log(data);
     console.log(data.video);
     var displayPoster = document.getElementById("displayPoster");
+    displayPoster.innerHTML = ""
     console.log(data.results[0].poster_path)
     var posterLink = data.results[0].poster_path
     var moviePoster = document.createElement("img")
