@@ -150,7 +150,7 @@ function getAPI(title){
         results = getResults(userInput);
         resultsHTML.style.display = "block";
         for (i = 0; i < results.length; i++) {
-          resultsHTML.innerHTML += "<li>" + results[i] + "</li>";
+          resultsHTML.innerHTML += "<li><button class='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mb-4 capitalize'>" + results[i] + "</button></li>";
         }
       }
     };
