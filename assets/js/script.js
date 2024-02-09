@@ -139,13 +139,15 @@ function getAPI(title){
       return response.json();
     })
     .then (function(data){
-      console.log(data.results[0].known_for[0].title);
-      var actorSearch = data.results[0].known_for[0].title.toLowerCase();
-      if (topMovies.find((element) => element == actorSearch)){
-        getAPI(actorSearch);
-        getAPI2(actorSearch);
-        display.classList.remove("hidden");
-      }
+  
+      for(var i = 0; i <data.results[0].known_for.length; i++){
+        console.log(data.results[0].known_for[i].title);
+        var actorSearch = data.results[0].known_for[i].title.toLowerCase();
+        if (topMovies.find((element) => element == actorSearch)){
+          getAPI(actorSearch);
+          getAPI2(actorSearch);
+          display.classList.remove("hidden");
+      }}
     })
     }
   var topMovies = ["citizen kane",
@@ -172,7 +174,7 @@ function getAPI(title){
 "2001: a space odyssey",
 "the maltese falcon",
 "raging bull",
-"e.t.: the extra-terrestrial",
+"e.t. the extra-terrestrial",
 "dr. strangelove",
 "bonnie and clyde",
 "apocalpyse now",
@@ -202,7 +204,7 @@ function getAPI(title){
 "amadeus",
 "all quiet on the western front",
 "the sound of music",
-"mash",
+"m*a*s*h",
 "the third man",
 "fantasia",
 "rebel without a cause",
