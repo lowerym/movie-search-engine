@@ -63,24 +63,25 @@ function getAPI(title){
       displayModalInfo.innerHTML = html;
     });
     }
-  function getAPI2(title){
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
-    .then (function (response){
-      return response.json();
-    })
-    .then (function(data) {
-    console.log(data);
-    console.log(data.video);
-    var displayPoster = document.getElementById("displayPoster");
-    displayPoster.innerHTML = ""
-    console.log(data.results[0].poster_path)
-    var posterLink = data.results[0].poster_path
-    var moviePoster = document.createElement("img")
-    moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
-    displayPoster.append(moviePoster);
-  });
 
-  }
+    function getAPI2(title){
+      fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+      .then (function (response){
+        return response.json();
+      })
+      .then (function(data) {
+      console.log(data);
+      console.log(data.video);
+      var displayPoster = document.getElementById("displayPoster");
+      displayPoster.innerHTML = ""
+      console.log(data.results[0].poster_path)
+      var posterLink = data.results[0].poster_path
+      var moviePoster = document.createElement("img")
+      moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
+      displayPoster.append(moviePoster);
+    });
+
+    }
 
   function getAPI2advanced(name){
     fetch ("https://api.themoviedb.org/3/search/movie?query="+ name +"&api_key=12126786fe2ba8d56422edd3325172f9")
@@ -103,6 +104,7 @@ function getAPI(title){
 
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
+    omdbActor(title)
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
@@ -148,7 +150,7 @@ function getAPI(title){
         results = getResults(userInput);
         resultsHTML.style.display = "block";
         for (i = 0; i < results.length; i++) {
-          resultsHTML.innerHTML += "<li>" + results[i] + "</li>";
+          resultsHTML.innerHTML += "<li><button class='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mb-4 capitalize'>" + results[i] + "</button></li>";
         }
       }
     };
@@ -193,7 +195,7 @@ function getAPI(title){
 "2001: a space odyssey",
 "the maltese falcon",
 "raging bull",
-"e.t.: the extra-terrestrial",
+"e.t. the extra-terrestrial",
 "dr. strangelove",
 "bonnie and clyde",
 "apocalpyse now",
@@ -223,7 +225,7 @@ function getAPI(title){
 "amadeus",
 "all quiet on the western front",
 "the sound of music",
-"mash",
+"m*a*s*h",
 "the third man",
 "fantasia",
 "rebel without a cause",
