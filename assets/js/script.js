@@ -42,6 +42,7 @@ function getAPI(title){
     displayInfo.innerHTML = html;
   });
   }
+
   function getAPIadvanced(name){
     fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ name)
     .then(function (response) {
@@ -122,24 +123,12 @@ function getAPI(title){
     }
   })
 
-  advancedFetchButton.addEventListener("click", function(){
-    var name = document.querySelector("#name").value.toLowerCase();
-    if (topMovies.find((element) => element == name)) {
-      getAPIadvanced(name);
-      getAPI2advanced(name);
-      displayAdvanced.classList.remove("hidden");
-    } else {
-      console.log("Please try again");
-    }
-  })
-
   function omdbActor(title){
     fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
       return response.json();
     })
     .then (function(data){
-
       for(var i = 0; i <data.results[0].known_for.length; i++){
         console.log(data.results[0].known_for[i].title);
         var actorSearch = data.results[0].known_for[i].title.toLowerCase();
