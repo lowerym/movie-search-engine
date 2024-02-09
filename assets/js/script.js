@@ -28,7 +28,7 @@ function getAPI(title){
   });
   }
   function getAPI2(title){
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
     .then (function (response){
       return response.json();
     })
@@ -48,6 +48,7 @@ function getAPI(title){
 
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
+    omdbActor(title)
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
@@ -57,6 +58,21 @@ function getAPI(title){
     }
   })
 
+  function omdbActor(title){
+    fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+    .then (function (response){
+      return response.json();
+    })
+    .then (function(data){
+      console.log(data.results[0].known_for[0].title);
+      var actorSearch = data.results[0].known_for[0].title.toLowerCase();
+      if (topMovies.find((element) => element == actorSearch)){
+        getAPI(actorSearch);
+        getAPI2(actorSearch);
+        display.classList.remove("hidden");
+      }
+    })
+    }
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
