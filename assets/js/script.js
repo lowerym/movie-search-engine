@@ -1,13 +1,28 @@
 var fetchButton = document.getElementById("fetch-button");
+var advancedFetchButton = document.getElementById("advanced-fetch-button");
 var display = document.getElementById("display");
+var advancedSearch = document.getElementById("advancedSearchModal");
+var advancedButton = document.getElementById("advanced-button");
+var advancedClose = document.getElementsByClassName("close")[0];
+var displayAdvanced = document.getElementById("displayModal");
 
-// fetch('https://api.themoviedb.org/3/movie/11?api_key=12126786fe2ba8d56422edd3325172f9')
-//   .then(function (response) {
-//     return response.json();
-//   })
-//   .then(function (data) {
-//     console.log(data);
-//   });
+advancedButton.addEventListener("click", function(){
+  advancedSearch.style.display = "block";
+});
+
+advancedClose.addEventListener("click", function(){
+  advancedSearch.style.display = "none";
+  displayModalPoster.innerHTML = "";
+  displayModalInfo.innerHTML = "";
+});
+
+window.addEventListener("click", function(event){
+  if (event.target == advancedSearch) {
+    advancedSearch.style.display = "none";
+    displayModalPoster.innerHTML = "";
+    displayModalInfo.innerHTML = "";
+  }
+});
 
 function getAPI(title){
   fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ title)
@@ -27,21 +42,60 @@ function getAPI(title){
     displayInfo.innerHTML = html;
   });
   }
-  function getAPI2(title){
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
+
+  function getAPIadvanced(name){
+    fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ name)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      var displayModalInfo = document.getElementById("displayModalInfo");
+      var movieTitle = data.Title;
+      var movieYear = data.Year;
+      var movieDirector = data.Director;
+      var movieWriter = data.Writer;
+      var movieCast = data.Actors;
+      var movieSynopsis = data.Plot;
+      var html = "<h2 class='text-2xl font-bold'>" + movieTitle + " " + "(" + movieYear + ")</h2><br/><h3 class='text-xl font-semibold'>Directed by:</h3><p>" + movieDirector + "</p><br/><h3 class='text-xl font-semibold'>Written by:</h3><p>" + movieWriter + "</p><br/><h3 class='text-xl font-semibold'>Starring:</h3><p>" + movieCast + "</p><br/><h3 class='text-xl font-semibold'>Synopsis:</h3><p>" + movieSynopsis + "</p>";
+      displayModalInfo.innerHTML = html;
+    });
+    }
+
+    function getAPI2(title){
+      fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+      .then (function (response){
+        return response.json();
+      })
+      .then (function(data) {
+      console.log(data);
+      console.log(data.video);
+      var displayPoster = document.getElementById("displayPoster");
+      displayPoster.innerHTML = ""
+      console.log(data.results[0].poster_path)
+      var posterLink = data.results[0].poster_path
+      var moviePoster = document.createElement("img")
+      moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
+      displayPoster.append(moviePoster);
+    });
+
+    }
+
+  function getAPI2advanced(name){
+    fetch ("https://api.themoviedb.org/3/search/movie?query="+ name +"&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
       return response.json();
     })
     .then (function(data) {
     console.log(data);
     console.log(data.video);
-    var displayPoster = document.getElementById("displayPoster");
-    displayPoster.innerHTML = ""
+    var displayModalPoster = document.getElementById("displayModalPoster");
+    displayModalPoster.innerHTML = ""
     console.log(data.results[0].poster_path)
     var posterLink = data.results[0].poster_path
     var moviePoster = document.createElement("img")
     moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
-    displayPoster.append(moviePoster);
+    displayModalPoster.append(moviePoster);
   });
 
   }
@@ -58,13 +112,23 @@ function getAPI(title){
     }
   })
 
+  advancedFetchButton.addEventListener("click", function(){
+    var name = document.querySelector("#name").value.toLowerCase();
+    if (topMovies.find((element) => element == name)) {
+      getAPIadvanced(name);
+      getAPI2advanced(name);
+      displayAdvanced.classList.remove("hidden");
+    } else {
+      console.log("Please try again");
+    }
+  })
+
   function omdbActor(title){
     fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
       return response.json();
     })
     .then (function(data){
-  
       for(var i = 0; i <data.results[0].known_for.length; i++){
         console.log(data.results[0].known_for[i].title);
         var actorSearch = data.results[0].known_for[i].title.toLowerCase();
