@@ -5,6 +5,8 @@ var advancedSearch = document.getElementById("advancedSearchModal");
 var advancedButton = document.getElementById("advanced-button");
 var advancedClose = document.getElementsByClassName("close")[0];
 var displayAdvanced = document.getElementById("displayModal");
+var autocomplete = document.getElementById("title");
+var resultsHTML = document.getElementById("results");
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -42,6 +44,7 @@ function getAPI(title){
     displayInfo.innerHTML = html;
   });
   }
+
   function getAPIadvanced(name){
     fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ name)
     .then(function (response) {
@@ -122,24 +125,12 @@ function getAPI(title){
     }
   })
 
-  advancedFetchButton.addEventListener("click", function(){
-    var name = document.querySelector("#name").value.toLowerCase();
-    if (topMovies.find((element) => element == name)) {
-      getAPIadvanced(name);
-      getAPI2advanced(name);
-      displayAdvanced.classList.remove("hidden");
-    } else {
-      console.log("Please try again");
-    }
-  })
-
   function omdbActor(title){
     fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
       return response.json();
     })
     .then (function(data){
-  
       for(var i = 0; i <data.results[0].known_for.length; i++){
         console.log(data.results[0].known_for[i].title);
         var actorSearch = data.results[0].known_for[i].title.toLowerCase();
@@ -150,6 +141,36 @@ function getAPI(title){
       }}
     })
     }
+
+    autocomplete.oninput = function () {
+      let results = [];
+      var userInput = this.value;
+      resultsHTML.innerHTML = "";
+      if (userInput.length > 0) {
+        results = getResults(userInput);
+        resultsHTML.style.display = "block";
+        for (i = 0; i < results.length; i++) {
+          resultsHTML.innerHTML += "<li>" + results[i] + "</li>";
+        }
+      }
+    };
+
+    function getResults(input) {
+      const results = [];
+      for (i = 0; i < topMovies.length; i++) {
+        if (input === topMovies[i].slice(0, input.length)) {
+          results.push(topMovies[i]);
+        }
+      }
+      return results;
+    }
+
+    resultsHTML.onclick = function (event) {
+      var setValue = event.target.innerText;
+      autocomplete.value = setValue;
+      this.innerHTML = "";
+    };
+    // lines 145 to 171 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
