@@ -28,15 +28,7 @@ function getAPI(title){
   });
   }
   function getAPI2(title){
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
-// =======
-//     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
-// >>>>>>> cfb4fe82d480ed35421b536a425c295b8067318d
-// =======
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
-// >>>>>>> 35ab1eb838471667b4ecb5a02a61bb1e233bf506
+    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
     .then (function (response){
       return response.json();
     })
