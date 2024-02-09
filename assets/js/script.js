@@ -60,24 +60,25 @@ function getAPI(title){
       displayModalInfo.innerHTML = html;
     });
     }
-  function getAPI2(title){
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
-    .then (function (response){
-      return response.json();
-    })
-    .then (function(data) {
-    console.log(data);
-    console.log(data.video);
-    var displayPoster = document.getElementById("displayPoster");
-    displayPoster.innerHTML = ""
-    console.log(data.results[0].poster_path)
-    var posterLink = data.results[0].poster_path
-    var moviePoster = document.createElement("img")
-    moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
-    displayPoster.append(moviePoster);
-  });
 
-  }
+    function getAPI2(title){
+      fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+      .then (function (response){
+        return response.json();
+      })
+      .then (function(data) {
+      console.log(data);
+      console.log(data.video);
+      var displayPoster = document.getElementById("displayPoster");
+      displayPoster.innerHTML = ""
+      console.log(data.results[0].poster_path)
+      var posterLink = data.results[0].poster_path
+      var moviePoster = document.createElement("img")
+      moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
+      displayPoster.append(moviePoster);
+    });
+
+    }
 
   function getAPI2advanced(name){
     fetch ("https://api.themoviedb.org/3/search/movie?query="+ name +"&api_key=12126786fe2ba8d56422edd3325172f9")
