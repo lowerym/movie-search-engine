@@ -28,11 +28,15 @@ function getAPI(title){
   });
   }
   function getAPI2(title){
-<<<<<<< HEAD
-    fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
-=======
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+//     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9") 
+// =======
+//     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
+// >>>>>>> cfb4fe82d480ed35421b536a425c295b8067318d
+// =======
     fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
->>>>>>> cfb4fe82d480ed35421b536a425c295b8067318d
+// >>>>>>> 35ab1eb838471667b4ecb5a02a61bb1e233bf506
     .then (function (response){
       return response.json();
     })
@@ -68,13 +72,15 @@ function getAPI(title){
       return response.json();
     })
     .then (function(data){
-      console.log(data.results[0].known_for[0].title);
-      var actorSearch = data.results[0].known_for[0].title.toLowerCase();
-      if (topMovies.find((element) => element == actorSearch)){
-        getAPI(actorSearch);
-        getAPI2(actorSearch);
-        display.classList.remove("hidden");
-      }
+  
+      for(var i = 0; i <data.results[0].known_for.length; i++){
+        console.log(data.results[0].known_for[i].title);
+        var actorSearch = data.results[0].known_for[i].title.toLowerCase();
+        if (topMovies.find((element) => element == actorSearch)){
+          getAPI(actorSearch);
+          getAPI2(actorSearch);
+          display.classList.remove("hidden");
+      }}
     })
     }
   var topMovies = ["citizen kane",
@@ -101,7 +107,7 @@ function getAPI(title){
 "2001: a space odyssey",
 "the maltese falcon",
 "raging bull",
-"e.t.: the extra-terrestrial",
+"e.t. the extra-terrestrial",
 "dr. strangelove",
 "bonnie and clyde",
 "apocalpyse now",
@@ -131,7 +137,7 @@ function getAPI(title){
 "amadeus",
 "all quiet on the western front",
 "the sound of music",
-"mash",
+"m*a*s*h",
 "the third man",
 "fantasia",
 "rebel without a cause",
