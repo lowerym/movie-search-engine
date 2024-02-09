@@ -5,6 +5,8 @@ var advancedSearch = document.getElementById("advancedSearchModal");
 var advancedButton = document.getElementById("advanced-button");
 var advancedClose = document.getElementsByClassName("close")[0];
 var displayAdvanced = document.getElementById("displayModal");
+var autocomplete = document.getElementById("title");
+var resultsHTML = document.getElementById("results");
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -139,6 +141,36 @@ function getAPI(title){
       }}
     })
     }
+
+    autocomplete.oninput = function () {
+      let results = [];
+      var userInput = this.value;
+      resultsHTML.innerHTML = "";
+      if (userInput.length > 0) {
+        results = getResults(userInput);
+        resultsHTML.style.display = "block";
+        for (i = 0; i < results.length; i++) {
+          resultsHTML.innerHTML += "<li>" + results[i] + "</li>";
+        }
+      }
+    };
+
+    function getResults(input) {
+      const results = [];
+      for (i = 0; i < topMovies.length; i++) {
+        if (input === topMovies[i].slice(0, input.length)) {
+          results.push(topMovies[i]);
+        }
+      }
+      return results;
+    }
+
+    resultsHTML.onclick = function (event) {
+      var setValue = event.target.innerText;
+      autocomplete.value = setValue;
+      this.innerHTML = "";
+    };
+    // lines 145 to 171 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
