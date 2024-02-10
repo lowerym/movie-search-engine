@@ -118,6 +118,8 @@ function getAPI(title){
       omdbActorAdvanced(name);
     } else if (searchSelect.value == "Director") {
       omdbDirectorAdvanced(name);
+    } else if (searchSelect.value == "Writer") {
+      omdbWriterAdvanced(name);
     }
     if (topMovies.find((element) => element == name)) {
       getAPIadvanced(name);
@@ -188,6 +190,28 @@ function getAPI(title){
         }
       })
       }
+
+      function omdbWriterAdvanced(name){
+        fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+        .then (function (response){
+          return response.json();
+        })
+        .then (function(data){
+          console.log(data);
+          if(data.results[0].known_for_department == "Writing"){
+            for(var i = 0; i <data.results[0].known_for.length; i++){
+              console.log(data.results[0].known_for[i].title);
+              var writerSearch = data.results[0].known_for[i].title.toLowerCase();
+              if (topMovies.find((element) => element == writerSearch)){
+                getAPIadvanced(writerSearch);
+                getAPI2advanced(writerSearch);
+                displayAdvanced.classList.remove("hidden");
+            }}
+          } else {
+            console.log("Please try again");
+          }
+        })
+        }
 
     autocomplete.oninput = function () {
       let results = [];
