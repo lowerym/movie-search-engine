@@ -8,6 +8,7 @@ var displayAdvanced = document.getElementById("displayModal");
 var autocomplete = document.getElementById("title");
 var resultsHTML = document.getElementById("results");
 var searchSelect = document.getElementById("searchSelect");
+  var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -100,8 +101,13 @@ function getAPI(title){
 
   }
 
+
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
+
+    storedMovies.push(title)
+    localStorage.setItem("storedMovies", JSON.stringify(storedMovies))
+
     omdbActor(title)
     if (topMovies.find((element) => element == title )){
       getAPI(title);
@@ -241,7 +247,7 @@ function getAPI(title){
       autocomplete.value = setValue;
       this.innerHTML = "";
     };
-    // lines 145 to 171 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
+    // lines 216 to 244 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
@@ -342,3 +348,6 @@ function getAPI(title){
 "guess who's coming to dinner",
 "yankee doodle dandy",
 ]
+
+
+
