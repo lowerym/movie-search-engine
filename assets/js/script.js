@@ -7,6 +7,9 @@ var advancedClose = document.getElementsByClassName("close")[0];
 var displayAdvanced = document.getElementById("displayModal");
 var autocomplete = document.getElementById("title");
 var resultsHTML = document.getElementById("results");
+var searchSelect = document.getElementById("searchSelect");
+  var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
+var recentMovies = document.getElementById("recentMovies")
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -31,8 +34,10 @@ function getAPI(title){
   .then(function (response) {
     return response.json();
   })
+
   .then(function (data) {
     console.log(data);
+
     var displayInfo = document.getElementById("displayInfo");
     var movieTitle = data.Title;
     var movieYear = data.Year;
@@ -71,7 +76,6 @@ function getAPI(title){
       })
       .then (function(data) {
       console.log(data);
-      console.log(data.video);
       var displayPoster = document.getElementById("displayPoster");
       displayPoster.innerHTML = ""
       console.log(data.results[0].poster_path)
@@ -90,10 +94,8 @@ function getAPI(title){
     })
     .then (function(data) {
     console.log(data);
-    console.log(data.video);
     var displayModalPoster = document.getElementById("displayModalPoster");
     displayModalPoster.innerHTML = ""
-    console.log(data.results[0].poster_path)
     var posterLink = data.results[0].poster_path
     var moviePoster = document.createElement("img")
     moviePoster.setAttribute("src", "https://image.tmdb.org/t/p/original" + posterLink)
@@ -102,12 +104,19 @@ function getAPI(title){
 
   }
 
+  getAPIrecentSearch();
+
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
+    recentMovies.innerHTML=""
+    storedMovies.push(title)
+    localStorage.setItem("storedMovies", JSON.stringify(storedMovies))
     omdbActor(title)
+    getAPIrecentSearch()
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
+
       display.classList.remove("hidden");
     } else {
       console.log("please try again");
@@ -116,6 +125,13 @@ function getAPI(title){
 
   advancedFetchButton.addEventListener("click", function(){
     var name = document.querySelector("#name").value.toLowerCase();
+    if (searchSelect.value == "Actor") {
+      omdbActorAdvanced(name);
+    } else if (searchSelect.value == "Director") {
+      omdbDirectorAdvanced(name);
+    } else if (searchSelect.value == "Writer") {
+      omdbWriterAdvanced(name);
+    }
     if (topMovies.find((element) => element == name)) {
       getAPIadvanced(name);
       getAPI2advanced(name);
@@ -142,6 +158,72 @@ function getAPI(title){
     })
     }
 
+    function omdbDirectorAdvanced(name){
+      fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+      .then (function (response){
+        return response.json();
+      })
+      .then (function(data){
+        console.log(data);
+        if(data.results[0].known_for_department == "Directing") {
+          for(var i = 0; i <data.results[0].known_for.length; i++){
+            console.log(data.results[0].known_for[i].title);
+            var directorSearch = data.results[0].known_for[i].title.toLowerCase();
+            if (topMovies.find((element) => element == directorSearch)){
+              getAPIadvanced(directorSearch);
+              getAPI2advanced(directorSearch);
+              displayAdvanced.classList.remove("hidden");
+          }}
+        } else {
+          console.log("Please try again");
+        }
+      })
+      }
+
+    function omdbActorAdvanced(name){
+      fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+      .then (function (response){
+        return response.json();
+      })
+      .then (function(data){
+        console.log(data);
+        if(data.results[0].known_for_department == "Acting"){
+          for(var i = 0; i <data.results[0].known_for.length; i++){
+            console.log(data.results[0].known_for[i].title);
+            var actorSearch = data.results[0].known_for[i].title.toLowerCase();
+            if (topMovies.find((element) => element == actorSearch)){
+              getAPIadvanced(actorSearch);
+              getAPI2advanced(actorSearch);
+              displayAdvanced.classList.remove("hidden");
+          }}
+        } else {
+          console.log("Please try again");
+        }
+      })
+      }
+
+      function omdbWriterAdvanced(name){
+        fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
+        .then (function (response){
+          return response.json();
+        })
+        .then (function(data){
+          console.log(data);
+          if(data.results[0].known_for_department == "Writing"){
+            for(var i = 0; i <data.results[0].known_for.length; i++){
+              console.log(data.results[0].known_for[i].title);
+              var writerSearch = data.results[0].known_for[i].title.toLowerCase();
+              if (topMovies.find((element) => element == writerSearch)){
+                getAPIadvanced(writerSearch);
+                getAPI2advanced(writerSearch);
+                displayAdvanced.classList.remove("hidden");
+            }}
+          } else {
+            console.log("Please try again");
+          }
+        })
+        }
+
     autocomplete.oninput = function () {
       let results = [];
       var userInput = this.value;
@@ -150,7 +232,7 @@ function getAPI(title){
         results = getResults(userInput);
         resultsHTML.style.display = "block";
         for (i = 0; i < results.length; i++) {
-          resultsHTML.innerHTML += "<li><button class='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mb-4 capitalize'>" + results[i] + "</button></li>";
+          resultsHTML.innerHTML += "<li><button class='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mb-4 capitalize'><button class='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mb-4 capitalize'>" + results[i] + "</button></button></li>";
         }
       }
     };
@@ -170,7 +252,7 @@ function getAPI(title){
       autocomplete.value = setValue;
       this.innerHTML = "";
     };
-    // lines 145 to 171 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
+    // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
@@ -271,3 +353,42 @@ function getAPI(title){
 "guess who's coming to dinner",
 "yankee doodle dandy",
 ]
+
+recentMovies.createElement("button")
+function getAPIrecentSearch () {
+  for(var i = 0; i < storedMovies.length; i++){
+    fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+
+      var displayInfo = document.getElementById("displayInfo");
+      var movieTitle = document.createElement("h2")
+      movieTitle.textContent = data.Title;
+      var movieYear = data.Year;
+      var movieDirector = data.Director;
+      var movieWriter = data.Writer;
+      var movieCast = data.Actors;
+      var movieSynopsis = data.Plot;
+      var html = "<h2 class='text-2xl font-bold'>" + movieTitle + " " + "(" + movieYear + ")</h2><br/><h3 class='text-xl font-semibold'>Directed by:</h3><p>" + movieDirector + "</p><br/><h3 class='text-xl font-semibold'>Written by:</h3><p>" + movieWriter + "</p><br/><h3 class='text-xl font-semibold'>Starring:</h3><p>" + movieCast + "</p><br/><h3 class='text-xl font-semibold'>Synopsis:</h3><p>" + movieSynopsis + "</p>";
+      var recentSearches= document.querySelector("#recentMovies").append(movieTitle) ;
+      var recentSearchesButton = document.createElement("button")
+        recentSearchesButton.textContent = "search"
+        recentSearchesButton.setAttribute("value", storedMovies[i])
+
+        recentSearchesButton.addEventListener("click",function(){
+            getAPI(data.Title);
+            getAPI2(data.Title);
+            display.classList.remove("hidden");
+
+
+        })
+
+      recentMovies.append(recentSearchesButton);
+
+    });
+  }
+}
+

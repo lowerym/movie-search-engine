@@ -1,4 +1,4 @@
-#displayModal {
+#display, #displayModal {
   padding: 20px;
 }
 
@@ -68,4 +68,6 @@
   color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+  padding: 2px 16px;
+}
