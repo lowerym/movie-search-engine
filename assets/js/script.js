@@ -9,6 +9,7 @@ var autocomplete = document.getElementById("title");
 var resultsHTML = document.getElementById("results");
 var searchSelect = document.getElementById("searchSelect");
   var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
+var recentMovies = document.getElementById("recentMovies")
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -33,8 +34,10 @@ function getAPI(title){
   .then(function (response) {
     return response.json();
   })
+  
   .then(function (data) {
     console.log(data);
+
     var displayInfo = document.getElementById("displayInfo");
     var movieTitle = data.Title;
     var movieYear = data.Year;
@@ -101,17 +104,19 @@ function getAPI(title){
 
   }
 
-
+  getAPIrecentSearch();
+  
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
-
+    recentMovies.innerHTML=""
     storedMovies.push(title)
     localStorage.setItem("storedMovies", JSON.stringify(storedMovies))
-
     omdbActor(title)
+    getAPIrecentSearch()
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
+  
       display.classList.remove("hidden");
     } else {
       console.log("please try again");
@@ -247,7 +252,7 @@ function getAPI(title){
       autocomplete.value = setValue;
       this.innerHTML = "";
     };
-    // lines 216 to 244 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
+    // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
@@ -349,5 +354,40 @@ function getAPI(title){
 "yankee doodle dandy",
 ]
 
+recentMovies.createElement("button")
+function getAPIrecentSearch () {
+  for(var i = 0; i < storedMovies.length; i++){
+    fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      
+      var displayInfo = document.getElementById("displayInfo");
+      var movieTitle = document.createElement("h2")
+      movieTitle.textContent = data.Title;
+      var movieYear = data.Year;
+      var movieDirector = data.Director;
+      var movieWriter = data.Writer;
+      var movieCast = data.Actors;
+      var movieSynopsis = data.Plot;
+      var html = "<h2 class='text-2xl font-bold'>" + movieTitle + " " + "(" + movieYear + ")</h2><br/><h3 class='text-xl font-semibold'>Directed by:</h3><p>" + movieDirector + "</p><br/><h3 class='text-xl font-semibold'>Written by:</h3><p>" + movieWriter + "</p><br/><h3 class='text-xl font-semibold'>Starring:</h3><p>" + movieCast + "</p><br/><h3 class='text-xl font-semibold'>Synopsis:</h3><p>" + movieSynopsis + "</p>";
+      var recentSearches= document.querySelector("#recentMovies").append(movieTitle) ;
+      var recentSearchesButton = document.createElement("button")
+        recentSearchesButton.textContent = "search"
+        recentSearchesButton.setAttribute("value", storedMovies[i])
+    
+        recentSearchesButton.addEventListener("click",function(){
+            getAPI(data.Title);
+            getAPI2(data.Title);
+            display.classList.remove("hidden");
+          
+    
+        })
+        
+      recentMovies.append(recentSearchesButton);
 
-
+    });
+  }
+}

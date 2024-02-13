@@ -3,12 +3,14 @@ var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
 
 
 for(var i = 0; i < storedMovies.length; i++){
+    
     fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
       console.log(data);
+        
       var displayInfo = document.getElementById("displayInfo");
       var movieTitle = document.createElement("h2")
       movieTitle.textContent = data.Title;
