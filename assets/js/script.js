@@ -42,7 +42,7 @@ recentMoviesButton.addEventListener("click", function(event){
 })
 
 function getAPI(title){
-  fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ title)
+  fetch ("https://www.omdbapi.com/?apikey=c236aea6&t="+ title)
   .then(function (response) {
     return response.json();
   })
@@ -63,7 +63,7 @@ function getAPI(title){
   }
 // this function is a modified version of the above function tailored to our advanced search function
   function getAPIadvanced(name){
-    fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ name)
+    fetch ("https://www.omdbapi.com/?apikey=c236aea6&t="+ name)
     .then(function (response) {
       return response.json();
     })
@@ -137,7 +137,7 @@ function getAPI(title){
 // our advanced search button corresponds to our modal and runs the modified versions of the functions mentioned above to
 //  pull up the corresponding movie while also correctly restricting the ability to search by, for example, actor with the actor
 //  option but not director unless you chose the director option
-  
+
 advancedFetchButton.addEventListener("click", function(){
     var name = document.querySelector("#name").value.toLowerCase();
     if (searchSelect.value == "Actor") {
@@ -195,7 +195,7 @@ advancedFetchButton.addEventListener("click", function(){
         }
       })
       }
-  
+
       // this function is used in our advanced search to specifically search by actor
     function omdbActorAdvanced(name){
       fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
@@ -273,29 +273,7 @@ advancedFetchButton.addEventListener("click", function(){
     };
     // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
 
-    // this function pulls the data from the getAPIrecentSearches function and puts it into a dropdown box list that is interactable.
-    for(var i = 0; i < storedMovies.length; i++){
-      fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
-        var movieTitle = document.createElement("li");
-        movieTitle.textContent = data.Title;
-        movieTitle.id = "recentSearch";
-        movieTitle.className = "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer";
-        document.querySelector("#recentMovies").append(movieTitle);
-      });
-    }
-    // this event listner corresponds to our drop down box for recent searches
-    if (recentSearch) {
-      recentSearch.addEventListener("click", function(){
-        display.classList.remove("hidden");
-      })
-    }
-
-  var topMovies = ["citizen kane",
+    const topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
  "gone with the wind",
@@ -396,11 +374,33 @@ advancedFetchButton.addEventListener("click", function(){
 "yankee doodle dandy",
 ]
 
+    // this function pulls the data from the getAPIrecentSearches function and puts it into a dropdown box list that is interactable.
+    for(var i = 0; i < storedMovies.length; i++){
+      fetch ("https://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        var movieTitle = document.createElement("li");
+        movieTitle.textContent = data.Title;
+        movieTitle.id = "recentSearch";
+        movieTitle.className = "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer";
+        document.querySelector("#recentMovies").append(movieTitle);
+      });
+    }
+    // this event listner corresponds to our drop down box for recent searches
+    if (recentSearch) {
+      recentSearch.addEventListener("click", function(){
+        display.classList.remove("hidden");
+      })
+    }
+
 // this function is used in our recent search feature to store search data into local storage and be able to click that result to repull the corresponding movie data
 recentMovies.createElement("button")
 function getAPIrecentSearch () {
   for(var i = 0; i < storedMovies.length; i++){
-    fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+    fetch ("https://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
     .then(function (response) {
       return response.json();
     })
