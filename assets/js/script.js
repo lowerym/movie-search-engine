@@ -8,8 +8,9 @@ var displayAdvanced = document.getElementById("displayModal");
 var autocomplete = document.getElementById("title");
 var resultsHTML = document.getElementById("results");
 var searchSelect = document.getElementById("searchSelect");
-  var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
-var recentMovies = document.getElementById("recentMovies")
+var dropdownBtn = document.getElementById("dropdownNavbarLink");
+const recentSearch = document.getElementById("recentSearch");
+var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || [];
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -29,6 +30,18 @@ window.addEventListener("click", function(event){
   }
 });
 // the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
+
+dropdownBtn.addEventListener("click", function(event){
+  var dropdown = document.getElementById("dropdownNavbar");
+  if(dropdown.classList.contains("hidden")){
+    dropdown.classList.remove("hidden");
+    dropdown.classList.add("block");
+  } else if (dropdown.classList.contains("block")){
+    dropdown.classList.remove("block");
+    dropdown.classList.add("hidden");
+  }
+})
+
 function getAPI(title){
   fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ title)
   .then(function (response) {
@@ -193,7 +206,7 @@ advancedFetchButton.addEventListener("click", function(){
       .then (function(data){
         console.log(data);
         if(data.results[0].known_for_department == "Acting"){
-          for(var i = 0; i <data.results[0].known_for.length; i++){
+          for(var i = 0; i < data.results[0].known_for.length; i++){
             console.log(data.results[0].known_for[i].title);
             var actorSearch = data.results[0].known_for[i].title.toLowerCase();
             if (topMovies.find((element) => element == actorSearch)){
@@ -260,6 +273,29 @@ advancedFetchButton.addEventListener("click", function(){
       this.innerHTML = "";
     };
     // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
+
+    for(var i = 0; i < storedMovies.length; i++){
+      fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        var movieTitle = document.createElement("li");
+        movieTitle.textContent = data.Title;
+        movieTitle.id = "recentSearch";
+        movieTitle.className = "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer";
+        document.querySelector("#recentMovies").append(movieTitle);
+      });
+    }
+
+    if (recentSearch) {
+      recentSearch.addEventListener("click", function(){
+        display.classList.remove("hidden");
+      })
+    }
+
+    // lines 216 to 244 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
