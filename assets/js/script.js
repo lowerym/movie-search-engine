@@ -29,7 +29,7 @@ window.addEventListener("click", function(event){
     displayModalInfo.innerHTML = "";
   }
 });
-// the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
+
 
 dropdownBtn.addEventListener("click", function(event){
   var dropdown = document.getElementById("dropdownNavbar");
@@ -41,7 +41,7 @@ dropdownBtn.addEventListener("click", function(event){
     dropdown.classList.add("hidden");
   }
 })
-
+// the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
 function getAPI(title){
   fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ title)
   .then(function (response) {
@@ -274,6 +274,7 @@ advancedFetchButton.addEventListener("click", function(){
     };
     // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
 
+    // this function pulls the data from the getAPIrecentSearches function and puts it into a dropdown box list that is interactable.
     for(var i = 0; i < storedMovies.length; i++){
       fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
       .then(function (response) {
@@ -288,14 +289,13 @@ advancedFetchButton.addEventListener("click", function(){
         document.querySelector("#recentMovies").append(movieTitle);
       });
     }
-
+    // this event listner corresponds to our drop down box for recent searches
     if (recentSearch) {
       recentSearch.addEventListener("click", function(){
         display.classList.remove("hidden");
       })
     }
 
-    // lines 216 to 244 leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
