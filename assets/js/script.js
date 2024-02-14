@@ -8,9 +8,9 @@ var displayAdvanced = document.getElementById("displayModal");
 var autocomplete = document.getElementById("title");
 var resultsHTML = document.getElementById("results");
 var searchSelect = document.getElementById("searchSelect");
-var dropdownBtn = document.getElementById("dropdownNavbarLink");
-const recentSearch = document.getElementById("recentSearch");
-var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || [];
+var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
+var recentMovies = document.getElementById("recentMovies");
+var recentMoviesBtn = document.getElementById("recentMoviesButton");
 
 advancedButton.addEventListener("click", function(){
   advancedSearch.style.display = "block";
@@ -30,24 +30,23 @@ window.addEventListener("click", function(event){
   }
 });
 
-
-dropdownBtn.addEventListener("click", function(event){
-  var dropdown = document.getElementById("dropdownNavbar");
-  if(dropdown.classList.contains("hidden")){
-    dropdown.classList.remove("hidden");
-    dropdown.classList.add("block");
-  } else if (dropdown.classList.contains("block")){
-    dropdown.classList.remove("block");
-    dropdown.classList.add("hidden");
+// the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
+recentMoviesButton.addEventListener("click", function(event){
+  if (recentMovies.classList.contains("hidden")){
+    recentMovies.classList.remove("hidden");
+    recentMovies.classList.add("block");
+  } else {
+    recentMovies.classList.remove("block");
+    recentMovies.classList.add("hidden");
   }
 })
-// the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
+
 function getAPI(title){
   fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ title)
   .then(function (response) {
     return response.json();
   })
-  
+
   .then(function (data) {
     console.log(data);
 
@@ -129,7 +128,7 @@ function getAPI(title){
     if (topMovies.find((element) => element == title )){
       getAPI(title);
       getAPI2(title);
-  
+
       display.classList.remove("hidden");
     } else {
       console.log("please try again");
@@ -407,29 +406,21 @@ function getAPIrecentSearch () {
     })
     .then(function (data) {
       console.log(data);
-      
-      var displayInfo = document.getElementById("displayInfo");
-      var movieTitle = document.createElement("h2")
-      movieTitle.textContent = data.Title;
-      var movieYear = data.Year;
-      var movieDirector = data.Director;
-      var movieWriter = data.Writer;
-      var movieCast = data.Actors;
-      var movieSynopsis = data.Plot;
-      var html = "<h2 class='text-2xl font-bold'>" + movieTitle + " " + "(" + movieYear + ")</h2><br/><h3 class='text-xl font-semibold'>Directed by:</h3><p>" + movieDirector + "</p><br/><h3 class='text-xl font-semibold'>Written by:</h3><p>" + movieWriter + "</p><br/><h3 class='text-xl font-semibold'>Starring:</h3><p>" + movieCast + "</p><br/><h3 class='text-xl font-semibold'>Synopsis:</h3><p>" + movieSynopsis + "</p>";
-      var recentSearches= document.querySelector("#recentMovies").append(movieTitle) ;
+
+      var movieTitle = data.Title;
       var recentSearchesButton = document.createElement("button")
-        recentSearchesButton.textContent = "search"
+      recentSearchesButton.classList.add("block", "px-4", "py-2", "text-white", "hover:bg-gray-100", "dark:hover:bg-gray-600", "dark:hover:text-white", "my-0", "mx-auto");
+        recentSearchesButton.textContent = data.Title;
         recentSearchesButton.setAttribute("value", storedMovies[i])
-    
+
         recentSearchesButton.addEventListener("click",function(){
             getAPI(data.Title);
             getAPI2(data.Title);
             display.classList.remove("hidden");
-          
-    
+
+
         })
-        
+
       recentMovies.append(recentSearchesButton);
 
     });
