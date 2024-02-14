@@ -1,6 +1,6 @@
 var storedMovies = JSON.parse(localStorage.getItem("storedMovies")) || []
 
-
+// this script was used as a testing ground for the recent search function so as to not interfere with the original script file.
 
 for(var i = 0; i < storedMovies.length; i++){
     

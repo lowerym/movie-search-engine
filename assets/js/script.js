@@ -30,6 +30,7 @@ window.addEventListener("click", function(event){
   }
 });
 
+// the below function fetches info from our first api and uses it to display movie credit info such as actors, director, and writers
 recentMoviesButton.addEventListener("click", function(event){
   if (recentMovies.classList.contains("hidden")){
     recentMovies.classList.remove("hidden");
@@ -60,7 +61,7 @@ function getAPI(title){
     displayInfo.innerHTML = html;
   });
   }
-
+// this function is a modified version of the above function tailored to our advanced search function
   function getAPIadvanced(name){
     fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ name)
     .then(function (response) {
@@ -79,7 +80,7 @@ function getAPI(title){
       displayModalInfo.innerHTML = html;
     });
     }
-
+// this function fetches data from our 2nd api to find and display the associated movie poster
     function getAPI2(title){
       fetch ("https://api.themoviedb.org/3/search/movie?query="+ title +"&api_key=12126786fe2ba8d56422edd3325172f9")
       .then (function (response){
@@ -97,7 +98,7 @@ function getAPI(title){
     });
 
     }
-
+// again this function is a modified version of the above function tailored to our advanced search function
   function getAPI2advanced(name){
     fetch ("https://api.themoviedb.org/3/search/movie?query="+ name +"&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
@@ -114,9 +115,9 @@ function getAPI(title){
   });
 
   }
-
+// this call is meant to display local storage info on initial page load.
   getAPIrecentSearch();
-
+  // this corresponds to our basic search button and runs the associated functions to both store the search in local storage and display the movie info and poster on the screen
   fetchButton.addEventListener("click", function(){
     var title = document.querySelector("#title").value.toLowerCase();
     recentMovies.innerHTML=""
@@ -133,8 +134,11 @@ function getAPI(title){
       console.log("please try again");
     }
   })
-
-  advancedFetchButton.addEventListener("click", function(){
+// our advanced search button corresponds to our modal and runs the modified versions of the functions mentioned above to
+//  pull up the corresponding movie while also correctly restricting the ability to search by, for example, actor with the actor
+//  option but not director unless you chose the director option
+  
+advancedFetchButton.addEventListener("click", function(){
     var name = document.querySelector("#name").value.toLowerCase();
     if (searchSelect.value == "Actor") {
       omdbActorAdvanced(name);
@@ -152,6 +156,7 @@ function getAPI(title){
     }
   })
 
+// this was the initial and basic version of the person search function before we specialized it for the categories of actor director and writer
   function omdbActor(title){
     fetch ("https://api.themoviedb.org/3/search/person?query=" + title +"&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
     .then (function (response){
@@ -168,7 +173,7 @@ function getAPI(title){
       }}
     })
     }
-
+// this function is used in our advanced search to specifically search by director
     function omdbDirectorAdvanced(name){
       fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
       .then (function (response){
@@ -190,7 +195,8 @@ function getAPI(title){
         }
       })
       }
-
+  
+      // this function is used in our advanced search to specifically search by actor
     function omdbActorAdvanced(name){
       fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
       .then (function (response){
@@ -199,7 +205,7 @@ function getAPI(title){
       .then (function(data){
         console.log(data);
         if(data.results[0].known_for_department == "Acting"){
-          for(var i = 0; i <data.results[0].known_for.length; i++){
+          for(var i = 0; i < data.results[0].known_for.length; i++){
             console.log(data.results[0].known_for[i].title);
             var actorSearch = data.results[0].known_for[i].title.toLowerCase();
             if (topMovies.find((element) => element == actorSearch)){
@@ -213,6 +219,7 @@ function getAPI(title){
       })
       }
 
+      // this function is used in our advanced search to specifically search by writer
       function omdbWriterAdvanced(name){
         fetch ("https://api.themoviedb.org/3/search/person?query=" + name + "&include_adult=false&language=en-US&page=1&api_key=12126786fe2ba8d56422edd3325172f9")
         .then (function (response){
@@ -235,6 +242,7 @@ function getAPI(title){
         })
         }
 
+      // the below three functions are used in tandem to create an autocomplete feature on our basic search page to make it easier to find a movie if you're unfamiliar with the AFI list
     autocomplete.oninput = function () {
       let results = [];
       var userInput = this.value;
@@ -264,6 +272,29 @@ function getAPI(title){
       this.innerHTML = "";
     };
     // above 3 functions leveraged from https://dev.to/michaelburrows/create-an-autocomplete-textbox-using-vanilla-javascript-37n0
+
+    // this function pulls the data from the getAPIrecentSearches function and puts it into a dropdown box list that is interactable.
+    for(var i = 0; i < storedMovies.length; i++){
+      fetch ("http://www.omdbapi.com/?apikey=c236aea6&t="+ storedMovies[i])
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        var movieTitle = document.createElement("li");
+        movieTitle.textContent = data.Title;
+        movieTitle.id = "recentSearch";
+        movieTitle.className = "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer";
+        document.querySelector("#recentMovies").append(movieTitle);
+      });
+    }
+    // this event listner corresponds to our drop down box for recent searches
+    if (recentSearch) {
+      recentSearch.addEventListener("click", function(){
+        display.classList.remove("hidden");
+      })
+    }
+
   var topMovies = ["citizen kane",
  "casablanca",
  "the godfather",
@@ -365,6 +396,7 @@ function getAPI(title){
 "yankee doodle dandy",
 ]
 
+// this function is used in our recent search feature to store search data into local storage and be able to click that result to repull the corresponding movie data
 recentMovies.createElement("button")
 function getAPIrecentSearch () {
   for(var i = 0; i < storedMovies.length; i++){
